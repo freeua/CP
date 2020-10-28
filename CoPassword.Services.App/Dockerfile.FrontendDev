@@ -1,0 +1,26 @@
+FROM microsoft/dotnet:2.1.402-sdk
+ARG source
+WORKDIR /app
+EXPOSE 5000
+ENV ASPNETCORE_URLS http://*:80
+#ENTRYPOINT ["dotnet", "run"]
+
+# Update the repository sources list
+RUN apt-get update \
+    && apt-get install -y curl \
+    && apt-get -y autoclean
+
+# Install Node.js
+RUN apt-get update -yq \
+    && apt-get install curl gnupg -yq \
+    && curl -sL https://deb.nodesource.com/setup_8.x | bash \
+    && apt-get install nodejs -yq
+
+# VERIFY VERSION
+RUN npm -v
+RUN node --version
+
+# INSTALL GLOBAL PACKAGES
+RUN npm i @angular/cli
+
+ENTRYPOINT ["/bin/bash", "-c", "dotnet restore && (npm start &) && dotnet run"]

@@ -1,0 +1,14 @@
+<app-modal [modalSettings]="currentMembersModal">
+    <div class="group-members-button">
+        <button class="btn btn-primary" (click)="openUsersList()">Add Users</button>
+        <button class="btn btn-primary" (click)="openGroupsList()">Add Groups</button>
+    </div>
+    <app-table [options]="membersTableSettings" [waiting]="false" [(data)]="groupDataForTable"
+               [controlMethods]="membersControlMethods"></app-table>
+</app-modal>
+
+<app-table [options]="groupsTableSettings" [waiting]="false" [(data)]="groups"
+           [controlMethods]="groupsControlMethods" [modal]="groupsModal"></app-table>
+
+<app-table [options]="usersTableSettings" [waiting]="false" [(data)]="users"
+           [controlMethods]="usersControlMethods" [modal]="usersModal"></app-table>

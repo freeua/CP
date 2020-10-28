@@ -1,0 +1,58 @@
+<div class="registration-form">
+    <h3 class="registration-form__title">Company Details (Professional)</h3>
+    <div class="step-container" *ngIf="step">
+        <div class="step-item" *ngFor="let step of steps[plan.type].steps; let index = index;"
+             [ngClass]="{'active': step.selected, 'completed': step.completed }">
+            <div class="step-content" (click)="changeStepByClick(index, step.selected, step.completed)">
+                <i [class]="step.icon"></i>
+            </div>
+            <div class="step-title">
+                {{ step.title }}
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="subscriptionForm" class="subscription-status">
+        <span class="subscription-status__text">The subscription is a</span>
+        <div class="subscription-status__radio">
+            <input id="radio1" class="radio-input" type="radio" formControlName="subscription" value="Company" > Company Subscription
+            <label for="radio1"></label>
+        </div>
+        <div class="subscription-status__radio">
+            <input id="radio2" class="radio-input" type="radio" formControlName="subscription" value="Private"> Private subscription
+            <label for="radio2"></label>
+        </div>
+    </form>
+
+    <div class="title-address">
+        <div class="title-address__invoice">
+            <h5>Address</h5>
+        </div>
+        <div class="title-address__invoice-duplicate">
+            <h5>Invoice address</h5>
+            <div class="same-content">
+                <input type="checkbox" class="invoice-input" id="sameinvoice" [(ngModel)]="sameInvoice" (change)="sameInvoiceAddress()">
+                <label for="sameinvoice">Same as address</label>
+            </div>
+        </div>
+    </div>
+    <div class="steps-forms-container">
+        <div class="form-left">
+            <app-dynamic-form #dynamicForm [config]="address"></app-dynamic-form>
+        </div>
+        <div class="form-right" [ngClass]="{'hide': sameInvoice}">
+            <app-dynamic-form #dynamicFormInvoice [config]="invoiceAddress"></app-dynamic-form>
+        </div>
+    </div>
+    <br>
+    <div class="recaptcha-container" *ngIf="!registrationService.disableReCaptcha">
+        <re-captcha (execute)="execute($event)" (resolved)="resolved($event)"></re-captcha>
+        <div class="error">
+            <div class="universal-field__error custom-tooltip" *ngIf="registrationService.reCaptchaError">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="tooltiptext">reCaptcha should be checked</span>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>

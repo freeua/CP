@@ -1,0 +1,50 @@
+<div class="registration-form">
+    <h3 class="registration-form__title">Payment</h3>
+    <div class="step-container" *ngIf="step">
+        <div class="step-item" *ngFor="let step of steps[plan.type].steps; let index = index;"
+             [ngClass]="{'active': step.selected, 'completed': step.completed }">
+            <div class="step-content" (click)="changeStepByClick(index, step.selected, step.completed)">
+                <i [class]="step.icon"></i>
+            </div>
+            <div class="step-title">
+                {{ step.title }}
+            </div>
+        </div>
+    </div>
+
+    <div class="steps-forms-container payment-container">
+        <div class="form-left">
+            <div class=" payment-result">
+                <div class="payment-result-title">Total Amount</div>
+                <div class="payment-result-value">
+                    <strong>CHF {{ sum }}.00</strong>
+                </div>
+            </div>
+        </div>
+        <div class="form-right">
+            <strong>Choose Payment</strong>
+            <form [formGroup]="paymentForm" class="subscription-status payment-form universal-form">
+                <div class="payment-container">
+                    <div id="payment" class="universal-field universal-field--input">
+                        <div class="subscription-status__radio" *ngFor="let item of payments">
+                            <input [id]="item.name" class="radio-input" type="radio" formControlName="payment" [value]="item.name">
+                            <label [for]="item.name">
+                                {{ item.name }}
+                            </label>
+                        </div>
+                        <div class="error">
+                            <div class="universal-field__error custom-tooltip">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span class="tooltiptext">Please select a payment method</span>
+                            </div>
+                            <div class="universal-field__ok">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr>
+</div>

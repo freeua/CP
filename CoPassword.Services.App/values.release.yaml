@@ -1,0 +1,23 @@
+replicaCount: __ReplicaCount__
+
+image:
+  repository: __ImageName__
+  tag: __Build.BuildNumber__
+
+ingress:
+  hosts:
+    - __IngressHostName__
+  tls:
+    - secretName: __TlsSecretName__
+      hosts:
+        - __IngressHostName__
+
+envvariables:
+  appinsights__instrumentationkey: __InstrumentationKey__
+  baseservicesettings__secretmanagementserviceurl: __SecretManagementServiceUrl__
+  baseservicesettings__pkiserviceurl: __PkiServiceUrl__
+  baseservicesettings__notificationsserviceurl: __NotificationsServiceUrl__
+  baseservicesettings__usermanagementserviceurl: __UserManagementServiceUrl__
+  baseservicesettings__appurl: __AppUrl__
+  baseservicesettings__proauthserviceurl: __ProAuthServiceUrl__
+  recaptcha__sitekey: __ReCaptchaSiteKey__

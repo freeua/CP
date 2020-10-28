@@ -1,0 +1,15 @@
+<div class="navbar col-sm-20 d-flex justify-content-between">
+  <div>
+    <i class="fa fa-bars" aria-hidden="true"></i>
+  </div>
+  <div class="dropdown lang-container">
+      <button class="btn dropdown-toggle lang" type="button" id="lang" data-toggle="dropdown">
+        <img [src]="'../../../../assets/images/flags/' + lang + '.png'" alt="{{ lang }}">
+      </button>
+      <div class="dropdown-menu" aria-labelledby="lang">
+        <a *ngFor="let lang of langs" (click)="changeLang(lang)" class="dropdown-item">
+          <img [src]="'../../../../assets/images/flags/' + lang + '.png'" alt="{{ lang }}">
+        </a>
+      </div>
+  </div>
+</div>

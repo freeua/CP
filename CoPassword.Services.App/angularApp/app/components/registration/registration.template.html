@@ -1,0 +1,43 @@
+<div class="container-fluid theme">
+    <div class="container">
+        <h1 class="text-white text-center pricing">Lorem</h1>
+        <h4 class="text-white text-center pricing-pre-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h4>
+
+        <ng-container #stepsContainer></ng-container>
+
+        <ng-template [ngIf]="!loadForm">
+            <div *ngIf="step" class="col-sm-20 d-flex buttons">
+                <ng-template [ngIf]="!_registrationService.disableNavigation">
+                    <button class="btn" (click)="prevStep()">Back</button>
+                    <button class="btn" *ngIf="!(steps[this._registrationService.plan].steps.length - 1 === step)"
+                            (click)="nextStep()">
+                        Continue
+                    </button>
+                    <button class="btn" *ngIf="steps[this._registrationService.plan].steps.length - 1 === step"
+                            (click)="verify()">
+                        Continue
+                    </button>
+                </ng-template>
+                <ng-template [ngIf]="_registrationService.disableNavigation">
+                    <button class="btn" disabled>Back</button>
+                    <button class="btn" disabled>
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </button>
+                </ng-template>
+            </div>
+        </ng-template>
+        <ng-template [ngIf]="loadForm">
+            <div class="preload-container">
+                <div class="preload-container">
+                    <span class="loading">
+                        <span class="outer-circle"></span>
+                        <span class="inner-circle">
+                            <span class="inner-center"></span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+        <br>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="col-sm-20 page-content">
+
+  <input class="clip-hide" type="text" id="clip-data-move" title="hide-input" />
+
+  <div class="in-content">
+    <h3 class="text-center group-title">{{ 'Your Vaults' | translate }}</h3>
+  </div>
+
+  <div class="in-content">
+    <div class="vault-container">
+      <app-vault-templates [user]="user" (createVaultEmit)="openVaultModalForCreate($event)"
+                           [onlyShow]="true"></app-vault-templates>
+      <app-permissions [groups]="groups" [users]="users"></app-permissions>
+      <app-vault-manage [user]="user"></app-vault-manage>
+    </div>
+    <div class="row">
+      <div class="col-sm-20 hierarchical-vaults-container">
+        <tree-view *ngIf="vaultLevel; else preloader" [user]="user" [data]="vaultLevel.childLevels" [awaiting]="awaiting"
+                   (setVaultLevelPermissionEmit)="setVaultLevelPermission($event)"
+                   (selectVaultPermissionEmit)="selectVaultPermission($event)"
+                   (selectVaultLevelEmit)="selectVaultLevelPermission($event)"
+                   (selectLevelVaultPermissionEmit)="selectLevelVaultPermission($event)"
+                   (templateActionEmit)="templateAction($event)"
+                   (deleteVaultLevelEmit)="deleteVaultLevel($event)"
+                   (bgDecryptEmit)="backgroundDecryptVault($event)"
+                   (addVaultLevelEmit)="addVaultLevel($event)"
+                   (deleteVaultEmit)="deleteVault($event)"
+                   (selectVaultEmit)="openVaultModalForUpdate($event)"
+                   (updateEmit)="getVaultLevels()"
+                   (copyFiledEmit)="copy($event)"
+                   [queryParams]="queryParams">
+        </tree-view>
+
+        <ng-template #preloader>
+
+          <div class="preload-container">
+            <span class="loading">
+                <span class="outer-circle"></span>
+                <span class="inner-circle">
+                    <span class="inner-center"></span>
+                </span>
+            </span>
+          </div>
+
+        </ng-template>
+      </div>
+    </div>
+
+  </div>
+
+</div>

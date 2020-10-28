@@ -1,0 +1,6 @@
+<!-- Show vault data -->
+<app-dynamic-form #dynamicForm [config]="modalFields" [modal]="formModal"></app-dynamic-form>
+
+<!-- Edit vault -->
+<app-table [options]="vaultSettings" [waiting]="false" [(data)]="fields"
+           [controlMethods]="vaultEditControlMethods" [modal]="vaultModalSettings"></app-table>

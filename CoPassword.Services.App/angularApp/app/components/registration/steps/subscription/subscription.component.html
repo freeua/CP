@@ -1,0 +1,23 @@
+<section class="plans d-flex justify-content-center">
+    <article class="plan" *ngFor="let item of planList">
+        <header class="plan-header">
+            <h5 class="plan-name">{{ item.name }}</h5>
+            <div class="content-price d-flex justify-content-center">
+                <span class="cur-price" *ngIf="!item.free">$</span>
+                <h2 class="plan-price">{{ item.price }}</h2>
+            </div>
+            <div class="plan-date">Forever</div>
+        </header>
+        <div class="plan-body">
+            <h4>2</h4>
+            <p>checks/day</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <p>Lorem ipsum</p>
+            <button class="btn btn-plan" (click)="selectPlan(item)">select</button>
+        </div>
+        <footer class="plan-footer">
+            62 checks/months
+        </footer>
+    </article>
+</section>

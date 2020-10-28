@@ -1,0 +1,124 @@
+<ul class="each-level" *ngIf="data" [dragula]="'tree-view-drag'" [dragulaModel]="data">
+    <ng-template ngFor let-child [ngForOf]="data">
+        <li class="tree-drag level-container" #item [attr.data-id]="child.id" [attr.data-type]="'level'">
+            <div class="main-level tree-drag">
+                <div class="pull-right tree-drag">
+                    <div class="dropdown vl-drop-settings tree-drag">
+                        <button class="btn btn-clear btn-sm dropdown-toggle vl-btn-position" type="button"
+                                id="vl-settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-wrench tree-drag"></i>
+                        </button>
+                        <div class="dropdown-menu tree-drag vl-settings" aria-labelledby="vl-settings">
+                            <a class="dropdown-item" (click)="templateAction({status: true, level: child})">
+                                {{ 'Add Vault' | translate }}
+                            </a>
+                            <a class="dropdown-item" (click)="addVaultLevel({levelVault: child, dataVaults: data})">
+                                {{ 'Add Level'| translate }}
+                            </a>
+                            <a class="dropdown-item" (click)="selectVaultLevelPermission(child)">
+                                {{ 'Vault level permission' | translate }}
+                            </a>
+                            <a class="dropdown-item" (click)="selectLevelVaultPermission(child)">
+                                {{ 'Vault permission' | translate }}
+                            </a>
+                            <a class="dropdown-item" (click)="deleteVaultLevel({levelVault: child, dataVaults: data})">
+                                {{ 'Delete' | translate }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <span class="label level-minus level-icons tree-drag" (click)="collapse(item)"
+                      *ngIf="child.childLevels.length">
+                  <i class="fa  fa-folder-open tree-drag"></i>
+              </span>
+                <span class="label level-plus level-icons tree-drag" (click)="collapse(item)"
+                      *ngIf="child.childLevels.length">
+                  <i class="fa fa-folder tree-drag"></i>
+              </span>
+                <span class="label level-icons tree-drag" *ngIf="!child.childLevels.length">
+                  <i class="far fa-folder-open"></i>
+              </span>
+                {{ child.name }}
+            </div>
+
+            <div class="child-container">
+                <ul class="child-level" [dragula]="'tree-vault-drag'" [dragulaModel]="child.vaults">
+                    <li class="vault-drag vault-level" *ngFor="let vault of child.vaults"
+                        [attr.data-id]="child.id" [attr.data-type]="'vault'" [attr.data-vault-id]="vault.id">
+                        <div class="vault-drag">
+                            <div class="pull-right vault-level-dropdown vault-drag d-flex">
+                                <ng-template ngFor let-field [ngForOf]="vault.fields">
+                                    <button [disabled]="!vault?.decrypt" *ngIf="field.hasQuickCopy"
+                                            [title]="field.label"
+                                            class="btn fa-copy-container btn-default vault-drag custom-tooltip btn-clear btn-desctiption"
+                                            (click)="copy({field: field, vault: vault})">
+                                        <i class="fa fa-files-o fa-copy-desc fa-color fa-size vault-drag"
+                                           [ngClass]="{'disabled': !vault?.decrypt}">
+                                        </i>
+                                        <span class="decrypt-desc vault-drag">{{ field.label }}</span>
+                                        <span class="tooltiptext">{{ field.label }}</span>
+                                    </button>
+                                </ng-template>
+                                <div class="vault-drag custom-tooltip">
+                                    <button class="btn btn-default vault-drag btn-clear btn-desctiption"
+                                            [disabled]="vault?.decrypt" [ngClass]="{'hide': vault?.decrypting}"
+                                            (click)="backgroundDecryptVault(vault)">
+                                        <i class="fa fa-database"></i>
+                                        <span class="vault-drag decrypt-desc">{{ 'Decrypt vault' | translate }}</span>
+                                    </button>
+
+                                    <button class="btn btn-default btn-sm decrypt-spiner spinner-rotate vault-drag btn-clear"
+                                            [ngClass]="{'hide': !vault?.decrypting}">
+                                        <i class="fa fa-spinner vault-drag"></i>
+                                    </button>
+                                    <span class="tooltiptext">{{ 'Decrypt vault' | translate }}</span>
+                                </div>
+                                <div class="dropdown v-drop-settings tree-drag">
+                                    <button class="btn btn-sm btn-clear dropdown-toggle v-btn-position tree-drag"
+                                            type="button"
+                                            id="vault-menu" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        <i class="fa fa-wrench vault-drag tree-drag"></i>
+                                    </button>
+                                    <div class="dropdown-menu vault-menu" aria-labelledby="vault-menu">
+                                        <a class="dropdown-item" (click)="selectVault({vault: vault, elem: child})">
+                                            {{ 'Vault' | translate }}
+                                        </a>
+                                        <a class="dropdown-item" (click)="selectVaultPermission(vault)">
+                                            {{ 'Vault permission' | translate }}
+                                        </a>
+                                        <a class="dropdown-item" (click)="deleteVault({vault: vault, child: child})">
+                                            {{ 'Delete' | translate }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="label label-info vault-drag level-icons">
+                            <i class="fa fa-file vault-drag"></i>
+                        </span>
+                            <span class="vault-drag vault-name" (click)="selectVault({vault: vault, elem: child})">
+                            {{ vault.name }}
+                        </span>
+                        </div>
+                    </li>
+                </ul>
+
+                <tree-view *ngIf="child.childLevels.length" [user]="user" [data]="child.childLevels"
+                           (selectLevelVaultPermissionEmit)="selectLevelVaultPermission($event)"
+                           (setVaultLevelPermissionEmit)="setVaultLevelPermission($event)"
+                           (selectVaultPermissionEmit)="selectVaultPermission($event)"
+                           (selectVaultLevelEmit)="selectVaultLevelPermission($event)"
+                           (templateActionEmit)="templateAction($event)"
+                           (deleteVaultLevelEmit)="deleteVaultLevel($event)"
+                           (bgDecryptEmit)="backgroundDecryptVault($event)"
+                           (addVaultLevelEmit)="addVaultLevel($event)"
+                           (selectVaultEmit)="selectVault($event)"
+                           (deleteVaultEmit)="deleteVault($event)"
+                           (updateEmit)="getVaultLevels()"
+                           (copyFiledEmit)="copy($event)"
+                           [queryParams]="queryParams">
+                </tree-view>
+            </div>
+        </li>
+    </ng-template>
+</ul>

@@ -1,0 +1,40 @@
+<div class="registration-form">
+    <h3 class="registration-form__title">Create Admin account</h3>
+    <div class="step-container" *ngIf="step">
+        <div class="step-item" *ngFor="let step of steps[registrationService.plan].steps; let index = index;"
+             [ngClass]="{'active': step.selected, 'completed': step.completed }">
+            <div class="step-content" (click)="changeStepByClick(index, step.selected, step.completed)">
+                <i [class]="step.icon"></i>
+            </div>
+            <div class="step-title">
+                {{ step.title }}
+            </div>
+        </div>
+    </div>
+
+    <div class="steps-forms-container account-container">
+        <div class="form-left">
+            <app-dynamic-form #dynamicForm [config]="customIdp"></app-dynamic-form>
+            <button class="form-add-idp__add">Verify</button>
+        </div>
+        <div class="form-right">
+            <strong>IDP Options</strong>
+            <div class="ipds-container">
+                <div class="idp-item" *ngFor="let item of IDPOptions">
+                    <div>
+                        {{ item.key }}
+                    </div>
+                    <div>
+                        {{ item.value }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-add-idp">
+                <input type="text" placeholder="new-key">
+                <input type="text" placeholder="data">
+                <button class="form-add-idp__add">Add</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>

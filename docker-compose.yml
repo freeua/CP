@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  copassword.services.app:
+    image: ${DOCKER_REGISTRY}copasswordservicesapp
+    build:
+      context: .
+      dockerfile: CoPassword.Services.App/Dockerfile

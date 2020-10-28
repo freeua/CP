@@ -1,0 +1,109 @@
+<ng-template #layout>
+    <div class="col-sm-20" *ngIf="amountSystemTemplates">
+        <h5 class="templates-type">{{ 'System templates' | translate }}</h5>
+    </div>
+    <div class="col-sm-20 template-container">
+        <ng-template ngFor let-tmp [ngForOf]="templates">
+            <div [ngClass]="{'templates-modal-width': onlyShow, 'templates-full-width': !onlyShow}"
+                 *ngIf="tmp.templateType === 'System'">
+                <div class="template-content" (click)="selectTemplate(tmp)"
+                     [ngClass]="{'selected': tmp === template && onlyShow}">
+                    <div class="template-assets" *ngIf="!onlyShow">
+                        <div class="dropdown show">
+                            <a class="btn btn-secondary btn-clear" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="temp-btn">
+                                <a class="dropdown-item" (click)="openVaultTemplateModal(true)">
+                                    {{ 'New Template' | translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="template-icon">
+                        <img [src]="'data:image/svg+xml;utf8;base64,' + tmp.icon  | safe" alt="{{ tmp.name }}">
+                    </div>
+                    <div class="container-template-description">
+                        <h5 class="template-name">{{ tmp.name }}</h5>
+                        <p class="template-description">{{ tmp.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+
+    <div class="col-md-20" *ngIf="amountSharedTemplates">
+        <hr>
+    </div>
+    <div class="col-sm-20" *ngIf="amountSharedTemplates">
+        <h5 class="templates-type">{{ 'Shared templates' | translate }}</h5>
+    </div>
+    <div class="col-sm-20 template-container">
+        <ng-template ngFor let-tmp [ngForOf]="templates">
+            <div [ngClass]="{'templates-modal-width': onlyShow, 'templates-full-width': !onlyShow}"
+                 *ngIf="tmp.templateType === 'Shared'">
+                <div class="template-content" (click)="selectTemplate(tmp)"
+                     [ngClass]="{'selected': tmp === template && onlyShow}">
+                    <div class="template-assets" *ngIf="!onlyShow">
+                        <div class="dropdown show">
+                            <a class="btn btn-secondary btn-clear" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="temp-btn">
+                                <a class="dropdown-item" (click)="openVaultTemplateModal(true)">
+                                    {{ 'New Template' | translate }}
+                                </a>
+                                <a class="dropdown-item" (click)="openVaultTemplateModal(false)">
+                                    {{ 'Edit Template' | translate }}
+                                </a>
+                                <a class="dropdown-item" (click)="deleteVaultTemplate(template)">
+                                    {{ 'Delete Template' | translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="template-icon">
+                        <img [src]="'data:image/svg+xml;utf8;base64,' + tmp.icon  | safe" alt="{{ tmp.name }}">
+                    </div>
+                    <div class="container-template-description">
+                        <h5 class="template-name">{{ tmp.name }}</h5>
+                        <p class="template-description">{{ tmp.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</ng-template>
+
+<ng-template [ngIf]="onlyShow">
+    <app-modal id="select-template" [modalSettings]="vaultListModal" [modalActions]="vaultListModalActions">
+        <ng-container [ngIf]="!loading" *ngTemplateOutlet="layout"></ng-container>
+        <div class="preload-container" *ngIf="loading">
+            <span class="loading">
+                <span class="outer-circle"></span>
+                <span class="inner-circle">
+                    <span class="inner-center"></span>
+                </span>
+            </span>
+        </div>
+    </app-modal>
+</ng-template>
+
+<ng-template [ngIf]="!onlyShow">
+    <div id="select-template">
+        <ng-container [ngIf]="!loading" *ngTemplateOutlet="layout"></ng-container>
+        <div class="preload-container" *ngIf="loading">
+            <span class="loading">
+                <span class="outer-circle"></span>
+                <span class="inner-circle">
+                    <span class="inner-center"></span>
+                </span>
+            </span>
+        </div>
+    </div>
+</ng-template>
+
+<app-table [options]="vaultTemplateSettings" [waiting]="false" [(data)]="templateFields"
+           [controlMethods]="vaultControlMethods" [modal]="vaultTemplateModalSettings"></app-table>

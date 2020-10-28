@@ -1,0 +1,44 @@
+<div class="registration-form">
+    <h3 class="registration-form__title">Company Details (Free)</h3>
+    <div class="step-container" *ngIf="step">
+        <div class="step-item" *ngFor="let step of steps[plan.type].steps; let index = index;"
+             [ngClass]="{'active': step.selected, 'completed': step.completed }">
+            <div class="step-content" (click)="changeStepByClick(index, step.selected, step.completed)">
+                <i [class]="step.icon"></i>
+            </div>
+            <div class="step-title">
+                {{ step.title }}
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="subscriptionForm" class="subscription-status">
+        <span class="subscription-status__text">The subscription is a</span>
+        <div class="subscription-status__radio">
+            <input id="radio1" class="radio-input" type="radio" formControlName="subscription" value="Company" > Company Subscription
+            <label for="radio1"></label>
+        </div>
+        <div class="subscription-status__radio">
+            <input id="radio2" class="radio-input" type="radio" formControlName="subscription" value="Private"> Private subscription
+            <label for="radio2"></label>
+        </div>
+    </form>
+
+    <div class="steps-forms-container">
+        <div>
+            <h5>Address</h5>
+            <app-dynamic-form #dynamicForm [config]="address"></app-dynamic-form>
+        </div>
+    </div>
+    <br>
+    <div class="recaptcha-container" *ngIf="!registrationService.disableReCaptcha">
+        <re-captcha (execute)="execute($event)" (resolved)="resolved($event)"></re-captcha>
+        <div class="error">
+            <div class="universal-field__error custom-tooltip" *ngIf="registrationService.reCaptchaError">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="tooltiptext">reCaptcha should be checked</span>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>

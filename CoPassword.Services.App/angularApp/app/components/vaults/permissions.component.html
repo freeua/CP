@@ -1,0 +1,169 @@
+<app-modal class="permissions-modal-window" [modalSettings]="permissionsModal">
+    <div class="permissions-list-container">
+        <div class="container-for-label added-permissions">
+            <div class="permission-label">
+                Current permissions
+            </div>
+            <div class="permission-content-label">
+                <div class="permission-added-list" *ngIf="!permissionLoading">
+                    <div *ngFor="let item of permissionsList | sort: 'name'" class="permissions-list-row" [ngClass]="{'inherited': item.inherited}">
+                        <div class="permission-list-column three">
+                            <span class="permission-list-icon">
+                                <i *ngIf="item.type === 'group'" class="fas fa-users"></i>
+                                <i *ngIf="item.type === 'user'" class="fas fa-user"></i>
+                            </span>
+                            {{ item.name }}
+                        </div>
+                        <div class="permission-list-column three">
+                            <select class="change-permissions-dropdown" title="Permissions" #changePermission (change)="updateSwitch(item, changePermission.value)">
+                                <ng-template [ngIf]="permissionTypeMode === 'vault' || permissionTypeMode === 'levelVault'">
+                                    <option value="NotSet" [attr.selected]="item.permission === 'NotSet' ? 'selected' : null">
+                                        {{ 'NotSet role' | translate }}
+                                    </option>
+                                    <option value="Deny" [attr.selected]="item.permission === 'Deny' ? 'selected' : null">
+                                        {{ 'Deny role' | translate }}
+                                    </option>
+                                    <option value="Read" [attr.selected]="item.permission === 'Read' ? 'selected' : null">
+                                        {{ 'Read role' | translate }}
+                                    </option>
+                                    <option value="Write" [attr.selected]="item.permission === 'Write' ? 'selected' : null">
+                                        {{ 'Write role' | translate }}
+                                    </option>
+                                    <option value="Delete" [attr.selected]="item.permission === 'Delete' ? 'selected' : null">
+                                        {{ 'Delete role' | translate }}
+                                    </option>
+                                    <option value="Manage" [attr.selected]="item.permission === 'Manage' ? 'selected' : null">
+                                        {{ 'Manage role' | translate }}
+                                    </option>
+                                    <option value="Manage" disabled [attr.selected]="item.permission === 'Owner' ? 'selected' : null">
+                                        {{ 'Owner role' | translate }}
+                                    </option>
+                                </ng-template>
+                                <ng-template [ngIf]="permissionTypeMode === 'vaultLevel'">
+                                    <option value="NotSet" [attr.selected]="item.permission === 'NotSet' ? 'selected' : null">
+                                        {{ 'NotSet role' | translate }}
+                                    </option>
+                                    <option value="Deny" [attr.selected]="item.permission === 'Deny' ? 'selected' : null">
+                                        {{ 'Deny role' | translate }}
+                                    </option>
+                                    <option value="Add" [attr.selected]="item.permission === 'Add' ? 'selected' : null">
+                                        {{ 'Add role' | translate }}
+                                    </option>
+                                    <option value="Delete" [attr.selected]="item.permission === 'Delete' ? 'selected' : null">
+                                        {{ 'Delete role' | translate }}
+                                    </option>
+                                    <option value="Manage" [attr.selected]="item.permission === 'Manage' ? 'selected' : null">
+                                        {{ 'Manage role' | translate }}
+                                    </option>
+                                    <option value="Manage" disabled [attr.selected]="item.permission === 'Owner' ? 'selected' : null">
+                                        {{ 'Owner role' | translate }}
+                                    </option>
+                                </ng-template>
+                            </select>
+                        </div>
+                        <div class="permission-list-column three permission-list-column--actions">
+                            <ng-template [ngIf]="!item.inherited">
+                                <button *ngIf="!item.waiting" class="permission-list-button" (click)="deleteSwitch(item)">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                                <button *ngIf="item.waiting" class="permission-list-button" (click)="deleteSwitch(item)">
+                                    <i class="fas fa-spinner fa-spin spinner-size"></i>
+                                </button>
+                            </ng-template>
+                            <ng-template [ngIf]="item.inherited">
+                                <button class="permission-list-button custom-tooltip">
+                                    <i class="fas fa-ban"></i>
+                                    <span class="tooltiptext left">Can't remove inherited permission</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+                <div class="preload-container" *ngIf="permissionLoading">
+                    <div class="loading">
+                        <span class="outer-circle"></span>
+                        <span class="inner-circle">
+                            <span class="inner-center"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="permissions-list-container">
+        <div class="container-for-label">
+            <div class="permission-label">
+                Add Users / Groups
+            </div>
+            <div class="permission-content-label">
+                <div class="find-permissions">
+                    <input placeholder="Search for user or group" type="text" #find (keyup)="0">
+                </div>
+            </div>
+        </div>
+        <div class="container-for-label available-list">
+            <div class="permission-label"></div>
+            <div class="permission-content-label">
+                <div class="permission-added-list">
+                    <div *ngFor="let item of availablePermissionsList | find: find.value: 'name' | sort: 'name'"
+                         class="permissions-list-row" [ngClass]="{'inherited': item.inherited}"
+                        (click)="selectPermissionForAdd(item)">
+                        <div class="permission-list-column two">
+                                <span class="permission-list-icon">
+                                    <i *ngIf="item.type === 'group'" class="fas fa-users"></i>
+                                    <i *ngIf="item.type === 'user'" class="fas fa-user"></i>
+                                </span>
+                            {{ item.name }}
+                        </div>
+                        <div class="permission-list-column two permission-list-column--actions">
+                            <ng-template [ngIf]="!item.inherited">
+                                <button *ngIf="item.status === 'member'" class="permission-list-button">
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                                <button *ngIf="item.status === 'clear'" class="permission-list-button">
+                                    <i class="fas fa-plus-circle"></i>
+                                </button>
+                                <button *ngIf="item.status === 'waiting'" class="permission-list-button">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </button>
+                                <button *ngIf="item.status === 'selected'" class="permission-list-button">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-for-label">
+            <div class="permission-label"></div>
+            <div class="permission-content-label border-none">
+                <select class="universal-modal__select select-permission-button" #permissions title="select">
+                    <ng-template [ngIf]="permissionTypeMode === 'vaultLevel'">
+                        <option value="NotSet">Not Set</option>
+                        <option value="Deny">Deny</option>
+                        <option value="Add">Add</option>
+                        <option value="Delete">Delete</option>
+                        <option value="Manage">Manage</option>
+                        <option disabled value="Owner">Manage</option>
+                    </ng-template>
+                    <ng-template [ngIf]="permissionTypeMode === 'vault' || permissionTypeMode === 'levelVault'">
+                        <option value="NotSet">Not Set</option>
+                        <option value="Deny">Deny</option>
+                        <option value="Read">Read</option>
+                        <option value="Write">Write</option>
+                        <option value="Delete">Delete</option>
+                        <option value="Manage">Manage</option>
+                        <option disabled value="Owner">Owner</option>
+                    </ng-template>
+                </select>
+
+                <button class="apply-permission-button" (click)="addPermission(permissions.value)" [disabled]="!enabled">
+                    Add
+                </button>
+            </div>
+        </div>
+    </div>
+</app-modal>

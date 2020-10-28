@@ -1,0 +1,15 @@
+<ng-template [ngIf]="isLoad">
+    <router-outlet></router-outlet>
+</ng-template>
+<ng-template [ngIf]="!isLoad">
+    <div class="preload-container">
+        <div class="preload-container">
+        <span class="loading">
+            <span class="outer-circle"></span>
+            <span class="inner-circle">
+                <span class="inner-center"></span>
+            </span>
+        </span>
+        </div>
+    </div>
+</ng-template>

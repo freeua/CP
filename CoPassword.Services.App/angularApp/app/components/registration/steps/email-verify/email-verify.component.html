@@ -1,0 +1,28 @@
+<div class="registration-form">
+    <h3 class="registration-form__title">Create Admin account</h3>
+    <div class="step-container" *ngIf="step">
+        <div class="step-item" *ngFor="let step of steps[registrationService.plan].steps; let index = index;"
+             [ngClass]="{'active': step.selected, 'completed': step.completed }">
+            <div class="step-content" (click)="changeStepByClick(index, step.selected, step.completed)">
+                <i [class]="step.icon"></i>
+            </div>
+            <div class="step-title">
+                {{ step.title }}
+            </div>
+        </div>
+    </div>
+
+    <div class="steps-forms-container account-container">
+        <div class="form-left">
+            <app-dynamic-form #dynamicForm [config]="form"></app-dynamic-form>
+            <div class="final-error-message" *ngIf="registrationService.messageError">
+                {{ registrationService.messageError }}
+            </div>
+            <button class="form-add-idp__add" (click)="sendVerification()">Verify</button>
+        </div>
+        <div class="form-right">
+
+        </div>
+    </div>
+    <hr>
+</div>

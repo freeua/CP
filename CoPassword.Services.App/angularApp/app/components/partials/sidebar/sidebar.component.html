@@ -1,0 +1,62 @@
+<nav class="sidebar">
+  <div class="user d-flex align-items-center">
+    <span class="logo">
+      <img src="../../../../assets/images/copassword-logo.png" alt="logo">
+    </span>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle username btn-clear" type="button" id="exit" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+        <span>{{ this.user?.firstName }} {{ this.user?.lastName }}</span>
+      </button>
+      <div class="dropdown-menu" aria-labelledby="exit">
+        <a class="dropdown-item" (click)="logout()">Logout</a>
+      </div>
+    </div>
+
+  </div>
+  <ul class="sidebar-menu">
+    <li routerLinkActive="active" [routerLink]="['/vaults']">
+      <a>
+        <span class="link-icon">
+          <i class="fas fa-user-secret"></i>
+        </span>
+        <span class="link-name">{{ 'Vaults' | translate }}</span>
+      </a>
+    </li>
+    <li routerLinkActive="active" [routerLink]="['/groups']">
+      <a>
+        <span class="link-icon">
+          <i class="fa fa-users"></i>
+        </span>
+        <span class="link-name">{{ 'Groups' | translate }}</span>
+      </a>
+    </li>
+    <li routerLinkActive="active" [routerLink]="['/templates']">
+      <a>
+        <span class="link-icon">
+          <i class="fas fa-object-group"></i>
+        </span>
+        <span class="link-name">{{ 'Templates' }}</span>
+      </a>
+    </li>
+    <li [routerLink]="['/login']">
+      <a>
+        <span class="link-icon">
+          <i class="fas fa-sign-in-alt"></i>
+        </span>
+        <span class="link-name">{{ 'Login' | translate }}</span>
+      </a>
+    </li>
+    <li [routerLink]="['/registration']">
+      <a>
+        <span class="link-icon">
+          <i class="fa fa-user-plus"></i>
+        </span>
+        <span class="link-name">
+          {{ 'Register' | translate }}
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>

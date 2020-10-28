@@ -1,0 +1,4 @@
+FROM microsoft/dotnet:2.1.4-aspnetcore-runtime
+WORKDIR /app
+COPY output/app .
+ENTRYPOINT ["dotnet", "CoPassword.Services.App.dll"]

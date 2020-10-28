@@ -1,0 +1,48 @@
+<div class="col-sm-20 page-content">
+  <div class="in-content">
+    <h3 class="text-center group-title">{{ 'Group Management' | translate }}</h3>
+  </div>
+  <div class="in-content" *ngIf="!selectedGroup">
+    <div class="row">
+      <div class="col-sm-20">
+
+        <div class="form-group d-flex">
+          <div class="col-sm-3 offset-sm-1">
+            <div class="row">
+              <button class="btn btn-default btn-lg add-plus" (click)="addGroup()">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-9 offset-sm-7">
+            <div class="row">
+              <div class="input-group">
+                <input type="text" class="form-control simple-field" placeholder="{{ 'Find group' | translate}}"
+                       #q (keyup)="0">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <app-table *ngIf="isLoad" [options]="editFormOptions" [waiting]="false" [data]="groups | filterGroup: q.value: 'exist' | paginate: { itemsPerPage: 10, currentPage: p }"
+                   [controlMethods]="tableControlMethods"></app-table>
+
+        <div class="pagination-container right">
+          <pagination-controls *ngIf="groups.length" (pageChange)="p = $event" previousLabel="" nextLabel="">
+          </pagination-controls>
+        </div>
+
+        <app-members-group [(users)]="users" [(groups)]="groups" #members></app-members-group>
+
+        <div class="preload-container" *ngIf="!isLoad">
+            <span class="loading">
+                <span class="outer-circle"></span>
+                <span class="inner-circle">
+                    <span class="inner-center"></span>
+                </span>
+            </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
